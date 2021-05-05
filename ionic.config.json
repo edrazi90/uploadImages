@@ -1,0 +1,7 @@
+{
+  "name": "uploadImages",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
