@@ -1,9 +1,48 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+
+export  interface ApiImage{
+  _id:String;
+  name:String;
+  createdAt:Date;
+  url:String;
+
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
 
-  constructor() { }
+  
+  url='http://localhost:3000';
+
+  constructor(private http:HttpClient) { }
+  getImages(){
+    return this.http.get<ApiImage[]>(`${this.url}/image`);
+  }
+
+  uploadImage(blobData,name,ext){
+    const formData =new FormData();
+    formData.append('file',blobData,`myimage.${ext}`);
+    formData.append('name',name);
+    
+    return this.http.post(`${this.url}/image`,FormData);
+  }
+
+  uploadImageFile(file:File){
+  const ext=file.name.split('.').pop();
+  const formData=new FormData();
+  formData.append('file',file,`myimage.${ext}`);
+  formData.append('name',file.name);
+  
+  return this.http.post(`${this.url}/image`,FormData);
+
+  }
+
+  deleteImage(id){
+  return this.http.delete(`${this.url}/image/${id}`);
+  }
+
+
 }
