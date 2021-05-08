@@ -10,16 +10,17 @@ export  interface ApiImage{
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root' 
 })
 export class ApiService {
 
   
-  url='http://localhost:3000';
+  url='http://10.25.11.20:8030/upload';
 
   constructor(private http:HttpClient) { }
+
   getImages(){
-    return this.http.get<ApiImage[]>(`${this.url}/image`);
+    return this.http.get<ApiImage[]>(`${this.url}/files`);
   }
 
   uploadImage(blobData,name,ext){
@@ -27,7 +28,7 @@ export class ApiService {
     formData.append('file',blobData,`myimage.${ext}`);
     formData.append('name',name);
     
-    return this.http.post(`${this.url}/image`,FormData);
+    return this.http.post(`${this.url}/uploader`,FormData);
   }
 
   uploadImageFile(file:File){
@@ -35,13 +36,14 @@ export class ApiService {
   const formData=new FormData();
   formData.append('file',file,`myimage.${ext}`);
   formData.append('name',file.name);
-  
-  return this.http.post(`${this.url}/image`,FormData);
+  console.log('success');
+  return this.http.post(`${this.url}/uploader`,FormData);
+
 
   }
 
   deleteImage(id){
-  return this.http.delete(`${this.url}/image/${id}`);
+  return this.http.delete(`${this.url}/files/${id}`);
   }
 
 

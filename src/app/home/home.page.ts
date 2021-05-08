@@ -20,20 +20,21 @@ export class HomePage {
   loadImages() {
     this.api.getImages().subscribe(images => {
       this.images = images;
+      console.log("getImage" +   JSON.stringify( this.images));
     });
   }
  
   async selectImageSource() {
     const buttons = [
       {
-        text: 'Take Photo',
+        text: 'TAKE PHOTO',
         icon: 'camera',
         handler: () => {
           this.addImage(CameraSource.Camera);
         }
       },
       {
-        text: 'Choose From Photos Photo',
+        text: 'CHOOSE FROM PHOTOS',
         icon: 'image',
         handler: () => {
           this.addImage(CameraSource.Photos);
@@ -44,10 +45,11 @@ export class HomePage {
     // Only allow file selection inside a browser
     if (!this.plt.is('hybrid')) {
       buttons.push({
-        text: 'Choose a File',
+        text: 'CHOOSE A FILE',
         icon: 'attach',
         handler: () => {
           this.fileInput.nativeElement.click();
+
         }
       });
     }
@@ -61,12 +63,13 @@ export class HomePage {
  
   async addImage(source: CameraSource) {
     const image = await Camera.getPhoto({
-      quality: 60,
+      quality: 100,
       allowEditing: true,
       resultType: CameraResultType.Base64,
       source
     });
- 
+
+
     const blobData = this.b64toBlob(image.base64String, `image/${image.format}`);
     const imageName = 'Give me a name';
  
@@ -82,6 +85,7 @@ export class HomePage {
     const file: File = target.files[0];
     this.api.uploadImageFile(file).subscribe((newImage: ApiImage) => {
       this.images.push(newImage);
+      console.log('after upload',newImage);
     });
   }
  
@@ -112,4 +116,8 @@ export class HomePage {
     const blob = new Blob(byteArrays, { type: contentType });
     return blob;
   }
+}
+
+function ngAfterViewInit() {
+  throw new Error('Function not implemented.');
 }
